@@ -23,6 +23,6 @@ html {
 }
 
 body {
-  background-color: theme("colors.current");
+  background-color: theme("colors.body");
   color: theme("colors.white");
 }
