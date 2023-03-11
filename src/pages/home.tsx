@@ -15,6 +15,7 @@ const Home = () => {
     for (let i = 0; i < 6; i++) {
       arrs.push({
         id: 1,
+        mediaType: "tv",
         title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam vero consequatur natus doloremque odit molestiae, sapiente, iste deleniti rem iure nihil adipisci aspernatur aliquid id architecto quasi sunt ullam deserunt!",
