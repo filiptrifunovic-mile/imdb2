@@ -37,7 +37,7 @@ const SearchResult = (props: Props) => {
   }, [props.keyword]);
 
   return (
-    <div className="absolute top-[48px] left-0 right-0 rounded-md overflow-hidden bg-header">
+    <div className="absolute top-[48px] left-0 right-0 rounded-md bg-header overflow-auto max-h-[480px] shadow-lg">
       {items.map((film, i) => (
         <div
           key={i}
@@ -60,7 +60,7 @@ const SearchResult = (props: Props) => {
       {totalItem > 5 ? (
         <button
           onClick={() => props.goToSearchPage()}
-          className="px-3 py-1.5 bg-primary w-full hover:text-body"
+          className="px-3 py-1.5 bg-primary w-full hover:text-body sticky bottom-0 shadow-lg"
         >
           More results
         </button>

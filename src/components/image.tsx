@@ -10,7 +10,11 @@ const Image = (props: Props) => {
     <div
       className={mergeClassName("bg-primary w-full h-full", props.className)}
     >
-      <img src={props.src} className="w-full h-full" alt="image2" />
+      <img
+        src={props.src}
+        className="w-full h-full object-cover"
+        alt="image2"
+      />
     </div>
   );
 };

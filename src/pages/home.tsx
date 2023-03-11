@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import Slider from "../components/slider/slider";
+import { Slider } from "../components/slider/slider";
 import Section from "../components/section";
 import TrendingHero from "../components/trending-hero";
 import { Film } from "../interfaces";
+import Card from "../components/card";
 
 const Home = () => {
   const [trending, setTrending] = useState<Film[]>([]);
+  const [inTheates, setinTheates] = useState<Film[]>([]);
 
-  const fetchTrendings = () => {
+  const fetch = () => {
     const arrs: Film[] = [];
 
     for (let i = 0; i < 6; i++) {
@@ -23,14 +25,15 @@ const Home = () => {
       });
     }
     setTrending(arrs);
+    setinTheates(arrs);
   };
 
   useEffect(() => {
-    fetchTrendings();
+    fetch();
   }, []);
 
   return (
-    <div>
+    <>
       <Section className="py-0">
         <Slider
           className="slick-hero"
@@ -43,7 +46,19 @@ const Home = () => {
           ))}
         </Slider>
       </Section>
-    </div>
+      <Section title="In Theaters">
+        <Slider
+          isMovieCard={true}
+          autoplay={true}
+          slidesToShow={5}
+          slidesToScroll={5}
+        >
+          {inTheates.map((film, i) => (
+            <Card film={film} key={i}></Card>
+          ))}
+        </Slider>
+      </Section>
+    </>
   );
 };
 
