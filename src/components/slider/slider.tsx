@@ -3,6 +3,7 @@ import Slick, { Settings } from "react-slick";
 
 interface Props extends Settings {
   isMovieCard?: boolean;
+  isSeasonCard?: boolean;
 }
 
 export const Slider = (props: Props) => {

@@ -8,6 +8,7 @@ export interface CustomComponentProps {
 
 export interface Season {
   id: number;
+  seasonNumber: number;
 }
 
 export interface Film {
@@ -25,4 +26,9 @@ export interface Cast {
   id: number;
   name: string;
   characterName: string;
+}
+
+export interface Trailer {
+  id: number;
+  key: string;
 }
