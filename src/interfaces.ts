@@ -20,3 +20,9 @@ export interface Film {
   genreIds: number[];
   seasons: Season[];
 }
+
+export interface Cast {
+  id: number;
+  name: string;
+  characterName: string;
+}

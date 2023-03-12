@@ -5,11 +5,13 @@ import Header from "../layouts/header";
 
 const AppContainer = () => {
   return (
-    <BrowserRouter>
-      <Header />
-      <Body />
-      <Footer />
-    </BrowserRouter>
+    <div className="pb-[64px]">
+      <BrowserRouter>
+        <Header />
+        <Body />
+        <Footer />
+      </BrowserRouter>
+    </div>
   );
 };
 
