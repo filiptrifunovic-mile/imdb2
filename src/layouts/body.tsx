@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Catalog from "../pages/catalog";
 import Film from "../pages/film";
 import Home from "../pages/home";
+import Season from "../pages/season";
 
 const Body = () => {
   return (
@@ -13,6 +14,7 @@ const Body = () => {
 
       <Route path="/movie/:id" element={<Film mediaType="movie" />}></Route>
       <Route path="/tv/:id" element={<Film mediaType="tv" />}></Route>
+      <Route path="/tv/:id/season/:seasonNumber" element={<Season />}></Route>
     </Routes>
   );
 };
