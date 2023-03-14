@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
   film: Film;
+  onClick: () => void;
 }
 
 const TrendingHero = (props: Props) => {
   const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate(`/${props.film.mediaType}/${props.film.id}`)}
+      onClick={() => props.onClick()}
       className="h-[300px] relative flex items-center cursor-pointer"
     >
       <div className="absolute left-0 right-0 bottom-0 top-0">

@@ -53,7 +53,7 @@ const Catalog = (props: Props) => {
     <>
       <div className="h-[120px] top-0 left-0 right-0 relative">
         <div className="overlay-film-cover"></div>
-        <Image src=""></Image>
+        <div className="h-full w-full bg-primary"></div>
       </div>
       <Section
         className="-mt-[90px] flex items-center relative z-10"

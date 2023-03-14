@@ -4,10 +4,12 @@ import Section from "../components/section";
 import TrendingHero from "../components/trending-hero";
 import { Film } from "../interfaces";
 import Card from "../components/card";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [trending, setTrending] = useState<Film[]>([]);
   const [inTheates, setinTheates] = useState<Film[]>([]);
+  const navigate = useNavigate();
 
   const fetch = () => {
     const arrs: Film[] = [];
@@ -42,21 +44,26 @@ const Home = () => {
           slidesToShow={1}
           slidesToScroll={1}
         >
-          {trending.map((film, i) => (
-            <TrendingHero film={film} key={i}></TrendingHero>
-          ))}
+          {(onSwipe) =>
+            trending.map((film, i) => (
+              <TrendingHero
+                onClick={() =>
+                  !onSwipe ? navigate(`/${film.mediaType}/${film.id}`) : ""
+                }
+                film={film}
+                key={i}
+              ></TrendingHero>
+            ))
+          }
         </Slider>
       </Section>
       <Section title="In Theaters">
-        <Slider
-          isMovieCard={true}
-          autoplay={true}
-          slidesToShow={5}
-          slidesToScroll={5}
-        >
-          {inTheates.map((film, i) => (
-            <Card title={film.title} imageSrc="" key={i}></Card>
-          ))}
+        <Slider isMovieCard={true} autoplay={true}>
+          {(_) =>
+            inTheates.map((film, i) => (
+              <Card title={film.title} imageSrc="" key={i}></Card>
+            ))
+          }
         </Slider>
       </Section>
     </>
