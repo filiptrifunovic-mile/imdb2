@@ -68,7 +68,46 @@ const Home = () => {
         </Slider>
       </Section>
       <Section title="In Theaters">
-        <Slider isMovieCard={true} autoplay={true}>
+        <Slider isMovieCard={true}>
+          {(_) =>
+            inTheates.map((film, i) => (
+              <Card
+                title={film.title}
+                imageSrc={tmdbImageSrc(film.posterPath)}
+                key={i}
+              ></Card>
+            ))
+          }
+        </Slider>
+      </Section>
+      <Section title="Whats popular">
+        <Slider isMovieCard={true}>
+          {(_) =>
+            inTheates.map((film, i) => (
+              <Card
+                title={film.title}
+                imageSrc={tmdbImageSrc(film.posterPath)}
+                key={i}
+              ></Card>
+            ))
+          }
+        </Slider>
+      </Section>
+      <Section title="TOP Rated TV">
+        <Slider isMovieCard={true}>
+          {(_) =>
+            inTheates.map((film, i) => (
+              <Card
+                title={film.title}
+                imageSrc={tmdbImageSrc(film.posterPath)}
+                key={i}
+              ></Card>
+            ))
+          }
+        </Slider>
+      </Section>
+      <Section title="TOP Rated Movies">
+        <Slider isMovieCard={true}>
           {(_) =>
             inTheates.map((film, i) => (
               <Card
