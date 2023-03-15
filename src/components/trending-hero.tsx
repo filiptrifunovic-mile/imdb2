@@ -14,7 +14,7 @@ const TrendingHero = (props: Props) => {
   return (
     <div
       onClick={() => props.onClick()}
-      className="h-[300px] relative flex items-center cursor-pointer"
+      className="h-[400px] relative flex items-center cursor-pointer"
     >
       <div className="absolute left-0 right-0 bottom-0 top-0">
         <div className="overlay-slick-hero"></div>
