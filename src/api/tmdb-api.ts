@@ -62,7 +62,27 @@ export const getPopulars = async (
       }>
     >(`${mediaType}/popular`, { params: { page } });
 
-    return data.results.map((val) => formatResult("movie", val));
+    return data.results.map((val) => formatResult(mediaType, val));
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};
+
+export const getTopRated = async (
+  mediaType: MediaType,
+  page = 1
+): Promise<Film[]> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        results: unknown[];
+      }>
+    >(`${mediaType}/top_rated`, { params: { page } });
+
+    return data.results.map((val) => formatResult(mediaType, val));
   } catch (error) {
     console.error(error);
   }
