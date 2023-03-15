@@ -1,7 +1,9 @@
 import { logRoles } from "@testing-library/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoLogoChrome } from "react-icons/io";
+import { search } from "../api/tmdb-api";
 import { Film } from "../interfaces";
+import { tmdbImageSrc } from "../utils";
 import Image from "./image";
 
 interface Props {
@@ -12,25 +14,19 @@ interface Props {
 const SearchResult = (props: Props) => {
   const [items, setItems] = useState<Film[]>([]);
 
-  const [totalItem, setTotalItem] = useState(6);
+  const [totalItem, setTotalItem] = useState(0);
 
-  const fetch = () => {
-    const arrs: Film[] = [];
+  const searchTimeout = useRef<any>("");
 
-    for (let i = 0; i < 6; i++) {
-      arrs.push({
-        id: 1,
-        mediaType: "tv",
-        title:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam vero consequatur natus doloremque odit molestiae, sapiente, iste deleniti rem iure nihil adipisci aspernatur aliquid id architecto quasi sunt ullam deserunt!",
-        description: "",
-        coverPath: "",
-        genreIds: [1, 2, 3, 4, 5, 6],
-        posterPath: "",
-        seasons: [],
-      });
-    }
-    setItems(arrs);
+  const fetch = async () => {
+    if (!props.keyword) return;
+
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(async () => {
+      const res = await search(props.keyword);
+      setTotalItem(res.totalResults);
+      setItems(res.films);
+    }, 120);
   };
 
   useEffect(() => {
@@ -46,7 +42,7 @@ const SearchResult = (props: Props) => {
         >
           <Image
             className="h-[72px] min-w-[102px] w-[102px] rounded-md"
-            src=""
+            src={tmdbImageSrc(film.posterPath)}
           />
           <div className="px-3 truncate">
             <p className="text-base truncate">{film.title}</p>

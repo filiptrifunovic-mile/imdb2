@@ -11,6 +11,7 @@ axiosClient.interceptors.request.use((config) => {
   return {
     ...config,
     params: {
+      ...config.params,
       api_key: process.env.REACT_APP_TMDB_API_KEY,
     },
   };
@@ -25,7 +26,7 @@ export const getTrendings = async (mediaType: MediaType): Promise<Film[]> => {
       }>
     >(`/trending/${mediaType}/week`);
 
-    return data.results.map((val) => formatResult(mediaType, val));
+    return data.results.map((val) => formatResult(val, mediaType));
   } catch (error) {
     console.error(error);
   }
@@ -42,7 +43,7 @@ export const getInTheaters = async (): Promise<Film[]> => {
       }>
     >(`/movie/now_playing`);
 
-    return data.results.map((val) => formatResult("movie", val));
+    return data.results.map((val) => formatResult(val, "movie"));
   } catch (error) {
     console.error(error);
   }
@@ -62,7 +63,7 @@ export const getPopulars = async (
       }>
     >(`${mediaType}/popular`, { params: { page } });
 
-    return data.results.map((val) => formatResult(mediaType, val));
+    return data.results.map((val) => formatResult(val, mediaType));
   } catch (error) {
     console.error(error);
   }
@@ -82,10 +83,40 @@ export const getTopRated = async (
       }>
     >(`${mediaType}/top_rated`, { params: { page } });
 
-    return data.results.map((val) => formatResult(mediaType, val));
+    return data.results.map((val) => formatResult(val, mediaType));
   } catch (error) {
     console.error(error);
   }
 
   return [];
+};
+
+export const search = async (
+  query: string,
+  page = 1
+): Promise<{
+  totalResults: number;
+  films: Film[];
+}> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        total_results: number;
+        results: unknown[];
+      }>
+    >(`/search/multi`, { params: { query, page } });
+
+    return {
+      totalResults: data.total_results,
+      films: data.results.map((val) => formatResult(val)),
+    };
+  } catch (error) {
+    console.error(error);
+  }
+
+  return {
+    totalResults: 0,
+    films: [],
+  };
 };
