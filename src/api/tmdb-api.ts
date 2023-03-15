@@ -11,7 +11,7 @@ axiosClient.interceptors.request.use((config) => {
   return {
     ...config,
     params: {
-      API_KEY: process.env.REACT_APP_TMDB_API_KEY,
+      api_key: process.env.REACT_APP_TMDB_API_KEY,
     },
   };
 });
@@ -26,6 +26,23 @@ export const getTrendings = async (mediaType: MediaType): Promise<Film[]> => {
     >(`/trending/${mediaType}/week`);
 
     return data.results.map((val) => formatResult(mediaType, val));
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};
+
+export const getInTheaters = async (): Promise<Film[]> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        results: unknown[];
+      }>
+    >(`/movie/now_playing`);
+
+    return data.results.map((val) => formatResult("movie", val));
   } catch (error) {
     console.error(error);
   }

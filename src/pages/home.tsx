@@ -5,34 +5,44 @@ import TrendingHero from "../components/trending-hero";
 import { Film } from "../interfaces";
 import Card from "../components/card";
 import { useNavigate } from "react-router-dom";
+import { getInTheaters, getTrendings } from "../api/tmdb-api";
+import { isFilm, tmdbImageSrc } from "../utils";
 
 const Home = () => {
   const [trending, setTrending] = useState<Film[]>([]);
   const [inTheates, setinTheates] = useState<Film[]>([]);
   const navigate = useNavigate();
 
-  const fetch = () => {
+  const fetchInTheaters = async () => {
+    setinTheates(await getInTheaters());
+  };
+
+  const fetchTrending = async () => {
+    const movies = await getTrendings("movie");
+    const tvs = await getTrendings("tv");
+
     const arrs: Film[] = [];
 
     for (let i = 0; i < 6; i++) {
-      arrs.push({
-        id: 1,
-        mediaType: "tv",
-        title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam vero consequatur natus doloremque odit molestiae, sapiente, iste deleniti rem iure nihil adipisci aspernatur aliquid id architecto quasi sunt ullam deserunt!",
-        coverPath: "",
-        genreIds: [1, 2, 3, 4, 5, 6],
-        posterPath: "",
-        seasons: [],
-      });
+      let film: unknown;
+
+      if (i % 2 === 1) {
+        if (tvs[i - 1]) {
+          film = tvs[i - 1];
+        }
+      } else {
+        if (movies[i - 1]) {
+          film = tvs[i - 1];
+        }
+      }
+      if (isFilm(film)) arrs.push(film);
     }
     setTrending(arrs);
-    setinTheates(arrs);
   };
 
   useEffect(() => {
-    fetch();
+    fetchTrending();
+    fetchInTheaters();
   }, []);
 
   return (
@@ -61,7 +71,11 @@ const Home = () => {
         <Slider isMovieCard={true} autoplay={true}>
           {(_) =>
             inTheates.map((film, i) => (
-              <Card title={film.title} imageSrc="" key={i}></Card>
+              <Card
+                title={film.title}
+                imageSrc={tmdbImageSrc(film.posterPath)}
+                key={i}
+              ></Card>
             ))
           }
         </Slider>
