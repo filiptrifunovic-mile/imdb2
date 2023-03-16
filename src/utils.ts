@@ -12,7 +12,7 @@ export const formatResult = (obj: any, mediaType?: MediaType): Film => {
     description: obj.overview,
     coverPath: obj.backdrop_path,
     posterPath: obj.poster_path,
-    genreIds: obj.genre_ids || [],
+    genreIds: obj.genre_ids || obj.genres?.map((g: any) => g.id) || [],
     mediaType: mediaType || obj.media_type,
     seasons: obj.seasons || [],
   };

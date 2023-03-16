@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getCasts, getDetail } from "../api/tmdb-api";
+import { useGlobalContext } from "../components/app-container";
 import Card from "../components/card";
 import Image from "../components/image";
 import Section from "../components/section";
 import { Slider } from "../components/slider/slider";
 import { Cast, Film as FilmInterface, Trailer } from "../interfaces";
 import { MediaType } from "../types";
+import { tmdbImageSrc } from "../utils";
 
 interface Props {
   mediaType: MediaType;
@@ -13,44 +16,29 @@ interface Props {
 
 const Film = (props: Props) => {
   const navigate = useNavigate();
-  const { params } = useParams();
+  const { id } = useParams<any>();
 
-  const [film, setFilm] = useState<FilmInterface>({
-    id: 0,
-    coverPath: "",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut nam voluptate assumenda optio eum officiis, voluptatibus quisquam repellat quaerat unde minima doloribus nulla nesciunt. Cumque eaque quam ea incidunt id.",
-    posterPath: "",
-    genreIds: [1, 2, 3, 4],
-    mediaType: props.mediaType,
-    seasons: [
-      {
-        id: 1,
-        seasonNumber: 1,
-      },
-      {
-        id: 2,
-        seasonNumber: 2,
-      },
-      {
-        id: 3,
-        seasonNumber: 3,
-      },
-    ],
-    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-  });
+  const [film, setFilm] = useState<FilmInterface | null>(null);
 
   const [cast, setCast] = useState<Cast[]>([]);
   const [trailers, setTrailers] = useState<Trailer[]>([]);
   const [recommendations, setRecommendations] = useState<FilmInterface[]>([]);
 
-  const fetch = () => {
+  const globalContext = useGlobalContext();
+
+  const fetch = async () => {
+    const film = await getDetail(props.mediaType, parseInt(id as string));
+
+    if (film) {
+      setFilm(film);
+      setCast(await getCasts(film?.mediaType, film.id));
+    }
+
     const arrs: any[] = [];
 
     for (let i = 0; i < 20; i++) {
       arrs.push({});
     }
-    setCast(arrs);
     setTrailers(arrs);
     setRecommendations(arrs);
   };
@@ -59,23 +47,33 @@ const Film = (props: Props) => {
     fetch();
   }, []);
 
+  if (!film) {
+    return <div>404</div>;
+  }
+
   return (
     <>
       <div className="h-[300px] top-0 left-0 right-0 relative">
         <div className="overlay-film-cover"></div>
-        <Image src=""></Image>
+        <Image src={tmdbImageSrc(film.coverPath)}></Image>
       </div>
       <Section className="-mt-[150px] flex items-center relative z-10 mobile:block">
         <Image
-          src=""
-          className="w-[200px] min-w-[200px] h-[340px] mobile:mx-auto"
+          src={tmdbImageSrc(film.posterPath)}
+          className="w-[100px] min-w-[200px] h-[340px] mobile:mx-auto mobile:mb-10"
         ></Image>
         <div className="px-3 flex flex-col gap-3">
           <p className="text-xl line-clamp-1">{film.title}</p>
           <ul className="flex items-center gap-3">
-            {film.genreIds.map((genre, i) => (
-              <li className="px-3 py-1.5 bg-primary text-sm" key={i}>
-                item {i}{" "}
+            {film.genreIds.map((id, i) => (
+              <li
+                key={id}
+                className="px-3 py-1.5 bg-primary rounded-lg text-sm"
+              >
+                {
+                  globalContext.genres[film.mediaType]?.find((g) => g.id === id)
+                    ?.name
+                }
               </li>
             ))}
           </ul>
@@ -87,8 +85,11 @@ const Film = (props: Props) => {
           <div className="flex items-center gap-3">
             {cast.map((cast, i) => (
               //mozda ne w-200
-              <div className="flex-shrink-0 w-[200px] my-3">
-                <Card key={i} title="lorem" imageSrc=""></Card>
+              <div className="flex-shrink-0 w-[200px] mb-6" key={i}>
+                <Card imageSrc={tmdbImageSrc(cast.profilePath)}>
+                  <p className="font-semibold text-xl">{cast.name}</p>
+                  <p className="opacity-[0.7] text-sm">{cast.characterName}</p>
+                </Card>
               </div>
             ))}
           </div>
@@ -100,8 +101,8 @@ const Film = (props: Props) => {
           <div className="flex items-center gap-3">
             {cast.map((cast, i) => (
               //mozda ne w-200
-              <div className="flex-shrink-0 w-[300px] my-3">
-                <Card key={i} imageSrc="" title=""></Card>
+              <div className="flex-shrink-0 w-[300px] my-3" key={i}>
+                <Card imageSrc="" title=""></Card>
               </div>
             ))}
           </div>

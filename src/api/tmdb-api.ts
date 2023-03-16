@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Film, Genre } from "../interfaces";
+import { Cast, Film, Genre } from "../interfaces";
 import { MediaType } from "../types";
 import { formatResult } from "../utils";
 
@@ -131,6 +131,48 @@ export const getGenres = async (mediaType: MediaType): Promise<Genre[]> => {
     >(`/genre/${mediaType}/list`);
 
     return data.genres as Genre[];
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};
+
+export const getDetail = async (
+  mediaType: MediaType,
+  id: number
+): Promise<null | Film> => {
+  try {
+    const { data } = await axiosClient.get(`${mediaType}/${id}`);
+
+    return formatResult(data, mediaType);
+  } catch (error) {
+    console.error(error);
+  }
+
+  return null;
+};
+
+export const getCasts = async (
+  mediaType: MediaType,
+  id: number
+): Promise<Cast[]> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        cast: any[];
+      }>
+    >(`/${mediaType}/${id}/credits`);
+
+    return (
+      data.cast.map((cast) => ({
+        id: cast.id,
+        characterName: cast.character,
+        name: cast.name,
+        profilePath: cast.profile_path,
+      })) ?? []
+    );
   } catch (error) {
     console.error(error);
   }

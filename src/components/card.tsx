@@ -1,9 +1,9 @@
-import { Film } from "../interfaces";
+import { CustomComponentProps, Film } from "../interfaces";
 import Image from "./image";
 
-interface Props {
+interface Props extends CustomComponentProps {
   imageSrc: string;
-  title: string;
+  title?: string;
   onClick?: Function;
 }
 
@@ -20,6 +20,7 @@ const Card = (props: Props) => {
         //min-h-[200px] h-[200px] max-w-[200px] justify-center
       ></Image>
       <p className="py-1.5 line-clamp-2">{props.title}</p>
+      {props.children}
     </div>
   );
 };

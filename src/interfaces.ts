@@ -26,6 +26,7 @@ export interface Cast {
   id: number;
   name: string;
   characterName: string;
+  profilePath: string;
 }
 
 export interface Trailer {
