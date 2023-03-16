@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
+import { getGenres } from "../api/tmdb-api";
 import { Genre } from "../interfaces";
 import Body from "../layouts/body";
 import Footer from "../layouts/footer";
@@ -25,6 +26,20 @@ const AppContainer = () => {
     movie: [],
     tv: [],
   });
+
+  const fetchGenres = async () => {
+    const movie = await getGenres("movie");
+    const tv = await getGenres("tv");
+
+    setGenres({
+      movie,
+      tv,
+    });
+  };
+
+  useEffect(() => {
+    fetchGenres();
+  }, []);
 
   if (!genres.movie.length || !genres.tv.length) {
     return (

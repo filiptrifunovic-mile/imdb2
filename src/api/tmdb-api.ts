@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Film } from "../interfaces";
+import { Film, Genre } from "../interfaces";
 import { MediaType } from "../types";
 import { formatResult } from "../utils";
 
@@ -119,4 +119,21 @@ export const search = async (
     totalResults: 0,
     films: [],
   };
+};
+
+export const getGenres = async (mediaType: MediaType): Promise<Genre[]> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        genres: unknown[];
+      }>
+    >(`/genre/${mediaType}/list`);
+
+    return data.genres as Genre[];
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
 };
