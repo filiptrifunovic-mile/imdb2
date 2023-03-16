@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCasts, getDetail } from "../api/tmdb-api";
+import { getCasts, getDetail, getTrailers } from "../api/tmdb-api";
 import { useGlobalContext } from "../components/app-container";
 import Card from "../components/card";
 import Image from "../components/image";
@@ -8,7 +8,7 @@ import Section from "../components/section";
 import { Slider } from "../components/slider/slider";
 import { Cast, Film as FilmInterface, Trailer } from "../interfaces";
 import { MediaType } from "../types";
-import { tmdbImageSrc } from "../utils";
+import { tmdbImageSrc, youtubeThumbnail } from "../utils";
 
 interface Props {
   mediaType: MediaType;
@@ -32,6 +32,7 @@ const Film = (props: Props) => {
     if (film) {
       setFilm(film);
       setCast(await getCasts(film?.mediaType, film.id));
+      setTrailers(await getTrailers(film?.mediaType, film.id));
     }
 
     const arrs: any[] = [];
@@ -39,7 +40,6 @@ const Film = (props: Props) => {
     for (let i = 0; i < 20; i++) {
       arrs.push({});
     }
-    setTrailers(arrs);
     setRecommendations(arrs);
   };
 
@@ -99,10 +99,10 @@ const Film = (props: Props) => {
       <Section title="Trailers">
         <div className="scrollbar scrollbar-thumb-primary scrollbar-track-header">
           <div className="flex items-center gap-3">
-            {cast.map((cast, i) => (
+            {trailers.map((trailer, i) => (
               //mozda ne w-200
               <div className="flex-shrink-0 w-[300px] my-3" key={i}>
-                <Card imageSrc="" title=""></Card>
+                <Image src={youtubeThumbnail(trailer.key)}></Image>
               </div>
             ))}
           </div>

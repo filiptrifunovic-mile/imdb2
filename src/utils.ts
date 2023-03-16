@@ -47,3 +47,7 @@ export const mergeFilms = (movies: Film[], tvs: Film[], limit = 6) => {
   }
   return arrs;
 };
+
+export const youtubeThumbnail = (key: string) => {
+  return `https://img.youtube.com/vi/${key}/mqdefault.jpg`;
+};

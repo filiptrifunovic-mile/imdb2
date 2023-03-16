@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Cast, Film, Genre } from "../interfaces";
+import { Cast, Film, Genre, Trailer } from "../interfaces";
 import { MediaType } from "../types";
 import { formatResult } from "../utils";
 
@@ -172,6 +172,33 @@ export const getCasts = async (
         name: cast.name,
         profilePath: cast.profile_path,
       })) ?? []
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};
+
+export const getTrailers = async (
+  mediaType: MediaType,
+  id: number
+): Promise<Trailer[]> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        results: any[];
+      }>
+    >(`/${mediaType}/${id}/videos`);
+
+    return (
+      data.results
+        .filter((res) => res.site.toLowerCase() === "youtube")
+        .map((res) => ({
+          id: res.id,
+          key: res.key,
+        })) ?? []
     );
   } catch (error) {
     console.error(error);
