@@ -21,6 +21,10 @@ const Home = () => {
   const [topRatedMovies, setTopRatedMovies] = useState<Film[]>([]);
   const navigate = useNavigate();
 
+  const goToDetailsPage = (film: Film) => {
+    navigate(`/${film.mediaType}/${film.id}`);
+  };
+
   const fetchTopRatedMovies = async () => {
     setTopRatedMovies(await getTopRated("movie"));
   };
@@ -82,6 +86,7 @@ const Home = () => {
           {(_) =>
             inTheates.map((film, i) => (
               <Card
+                onClick={() => goToDetailsPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
@@ -95,6 +100,7 @@ const Home = () => {
           {(_) =>
             populars.map((film, i) => (
               <Card
+                onClick={() => goToDetailsPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
@@ -108,6 +114,7 @@ const Home = () => {
           {(_) =>
             topRatedTv.map((film, i) => (
               <Card
+                onClick={() => goToDetailsPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
@@ -121,6 +128,7 @@ const Home = () => {
           {(_) =>
             topRatedMovies.map((film, i) => (
               <Card
+                onClick={() => goToDetailsPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
