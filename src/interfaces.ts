@@ -32,3 +32,8 @@ export interface Trailer {
   id: number;
   key: string;
 }
+
+export interface Genre {
+  id: number;
+  name: string;
+}

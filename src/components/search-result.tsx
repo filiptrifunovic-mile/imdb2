@@ -34,15 +34,16 @@ const SearchResult = (props: Props) => {
   }, [props.keyword]);
 
   return (
-    <div className="absolute top-[48px] left-0 right-0 rounded-md bg-header overflow-auto max-h-[480px] shadow-lg">
+    <div className="absolute top-[48px] left-0 right-0 rounded-md bg-header overflow-auto max-h-[480px] shadow-lg scrollbar scrollbar-thumb-primary scrollbar-track-header">
       {items.map((film, i) => (
         <div
           key={i}
           className="flex items-start p-1.5 rounded-lg hover:bg-primary cursor-pointer m-1.5"
         >
-          <Image
-            className="h-[72px] min-w-[102px] w-[102px] rounded-md"
+          <img
+            className="h-[110px] w-[auto] rounded-md object-cover"
             src={tmdbImageSrc(film.posterPath)}
+            alt="image3"
           />
           <div className="px-3 truncate">
             <p className="text-base truncate">{film.title}</p>
