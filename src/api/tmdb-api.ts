@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Cast, Film, Genre, Trailer } from "../interfaces";
+import { Cast, Episode, Film, Genre, Season, Trailer } from "../interfaces";
 import { MediaType } from "../types";
 import { formatResult } from "../utils";
 
@@ -225,4 +225,41 @@ export const getRecommendation = async (
   }
 
   return [];
+};
+
+export const getSeason = async (
+  tvId: number,
+  seasonNumber: number
+): Promise<Season | null> => {
+  try {
+    const { data } = await axiosClient.get<any, any>(
+      `/tv/${tvId}/season/${seasonNumber}`
+    );
+
+    const film = await getDetail("tv", tvId);
+
+    return {
+      id: data.id,
+      filmName: film?.title || "",
+      name: data.name,
+      posterPath: data.poster_path,
+      seasonNumber: data.season_number,
+      airDate: data.air_date,
+      episodes: data.episodes.map(
+        (episode: any) =>
+          ({
+            id: episode.id,
+            title: episode.name,
+            overview: episode.overview,
+            airDate: episode.air_date,
+            stillPath: episode.still_path,
+            episodeNumber: episode.episode_number,
+          } satisfies Episode)
+      ),
+    };
+  } catch (error) {
+    console.error(error);
+  }
+
+  return null;
 };

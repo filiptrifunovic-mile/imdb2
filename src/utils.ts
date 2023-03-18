@@ -24,7 +24,7 @@ export const formatResult = (obj: any, mediaType?: MediaType): Film => {
             posterPath: season.poster_path,
             seasonNumber: season.season_number,
             // airDate: season.air_date,
-            // episodes: [],
+            episodes: [],
           } satisfies Season)
       ) || [],
   };
@@ -62,4 +62,10 @@ export const mergeFilms = (movies: Film[], tvs: Film[], limit = 6) => {
 
 export const youtubeThumbnail = (key: string) => {
   return `https://img.youtube.com/vi/${key}/mqdefault.jpg`;
+};
+
+export const formatDate = (val: string) => {
+  const d = new Date(val);
+
+  return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
 };
