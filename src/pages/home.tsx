@@ -25,12 +25,12 @@ const Home = () => {
     navigate(`/${film.mediaType}/${film.id}`);
   };
 
-  const fetchTopRatedMovies = async () => {
-    setTopRatedMovies(await getTopRated("movie"));
+  const fetchTopRatedMovie = async () => {
+    setTopRatedMovies(await (await getTopRated("movie")).films);
   };
 
   const fetchTopRatedTv = async () => {
-    setTopRatedTv(await getTopRated("tv"));
+    setTopRatedTv(await (await getTopRated("tv")).films);
   };
 
   const fetchPopulars = async () => {
@@ -55,7 +55,7 @@ const Home = () => {
     fetchTrending();
     fetchInTheaters();
     fetchPopulars();
-    fetchTopRatedMovies();
+    fetchTopRatedMovie();
     fetchTopRatedTv();
   }, []);
 

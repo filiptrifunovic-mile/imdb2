@@ -74,27 +74,42 @@ export const getPopulars = async (
 export const getTopRated = async (
   mediaType: MediaType,
   page = 1
-): Promise<Film[]> => {
+): Promise<{
+  films: Film[];
+  totalPages: number;
+}> => {
   try {
     const { data } = await axiosClient.get<
       any,
       AxiosResponse<{
         results: unknown[];
+        total_pages: number;
       }>
-    >(`${mediaType}/top_rated`, { params: { page } });
+    >(`/${mediaType}/top_rated`, {
+      params: {
+        page,
+      },
+    });
 
-    return data.results.map((val) => formatResult(val, mediaType));
+    return {
+      films: data.results.map((val) => formatResult(val, mediaType)),
+      totalPages: data.total_pages,
+    };
   } catch (error) {
     console.error(error);
   }
 
-  return [];
+  return {
+    films: [],
+    totalPages: 0,
+  };
 };
 
 export const search = async (
   query: string,
   page = 1
 ): Promise<{
+  totalPages: number;
   totalResults: number;
   films: Film[];
 }> => {
@@ -102,12 +117,19 @@ export const search = async (
     const { data } = await axiosClient.get<
       any,
       AxiosResponse<{
+        total_pages: number;
         total_results: number;
         results: unknown[];
       }>
-    >(`/search/multi`, { params: { query, page } });
+    >(`/search/multi`, {
+      params: {
+        query,
+        page,
+      },
+    });
 
     return {
+      totalPages: data.total_pages,
       totalResults: data.total_results,
       films: data.results.map((val) => formatResult(val)),
     };
@@ -116,6 +138,7 @@ export const search = async (
   }
 
   return {
+    totalPages: 0,
     totalResults: 0,
     films: [],
   };
@@ -262,4 +285,38 @@ export const getSeason = async (
   }
 
   return null;
+};
+
+export const discover = async (
+  mediaType: MediaType,
+  page = 1
+): Promise<{
+  films: Film[];
+  totalPages: number;
+}> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        total_pages: number;
+        results: unknown[];
+      }>
+    >(`/discover/${mediaType}`, {
+      params: {
+        page,
+      },
+    });
+
+    return {
+      films: data.results.map((val) => formatResult(val, mediaType)),
+      totalPages: data.total_pages,
+    };
+  } catch (error) {
+    console.error(error);
+  }
+
+  return {
+    films: [],
+    totalPages: 0,
+  };
 };

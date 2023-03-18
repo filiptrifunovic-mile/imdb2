@@ -29,7 +29,7 @@ const Season = () => {
 
   return (
     <>
-      <div className="h-[150px] top-0 left-0 right-0 relative">
+      <div className="h-[250px] top-0 left-0 right-0 relative">
         <div className="overlay-film-cover"></div>
         <Image
           src={tmdbImageSrc(season.posterPath)}
@@ -65,10 +65,12 @@ const Season = () => {
             ></Image>
             <div className="overflow-hidden flex flex-col gap-3 mobile:py-3">
               <p className="text-lg truncate">
-                {episode.episodeNumber}. {episode.title}
+                Episode {episode.episodeNumber} <br />
+                {episode.title}
               </p>
               <p className="opacity-[0.9] line-clamp-5">{episode.overview}</p>
               <div className="mt-auto pt-3 text-right">
+                Air Date <br />
                 {formatDate(episode.airDate)}
               </div>
             </div>
