@@ -206,3 +206,23 @@ export const getTrailers = async (
 
   return [];
 };
+
+export const getRecommendation = async (
+  mediaType: MediaType,
+  id: number
+): Promise<Film[]> => {
+  try {
+    const { data } = await axiosClient.get<
+      any,
+      AxiosResponse<{
+        results: unknown[];
+      }>
+    >(`${mediaType}/${id}/recommendations`);
+
+    return data.results.map((val) => formatResult(val, mediaType));
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};

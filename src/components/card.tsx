@@ -1,4 +1,5 @@
 import { CustomComponentProps, Film } from "../interfaces";
+import { mergeClassName } from "../utils";
 import Image from "./image";
 
 interface Props extends CustomComponentProps {
@@ -11,7 +12,11 @@ const Card = (props: Props) => {
   return (
     <div
       onClick={() => (props.onClick ? props.onClick() : "")}
-      className="mx-3 my-1.5 cursor-pointer"
+      className={mergeClassName(
+        "group mx-3 my-1.5 cursor-pointer",
+        props.className
+      )}
+
       //flex flex-col items-center
     >
       <Image

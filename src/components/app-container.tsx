@@ -50,17 +50,15 @@ const AppContainer = () => {
   }
   return (
     <BrowserRouter>
-      <div className="pb-[64px]">
-        <GlobalContext.Provider
-          value={{
-            genres,
-          }}
-        >
-          <Header />
-          <Body />
-          <Footer />
-        </GlobalContext.Provider>
-      </div>
+      <GlobalContext.Provider
+        value={{
+          genres,
+        }}
+      >
+        <Header />
+        <Body />
+        <Footer />
+      </GlobalContext.Provider>
     </BrowserRouter>
   );
 };

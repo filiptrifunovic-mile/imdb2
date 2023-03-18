@@ -8,7 +8,9 @@ export interface CustomComponentProps {
 
 export interface Season {
   id: number;
+  name: string;
   seasonNumber: number;
+  posterPath: string;
 }
 
 export interface Film {

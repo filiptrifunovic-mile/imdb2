@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getCasts, getDetail, getTrailers } from "../api/tmdb-api";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  getCasts,
+  getDetail,
+  getRecommendation,
+  getTrailers,
+} from "../api/tmdb-api";
 import { useGlobalContext } from "../components/app-container";
 import Card from "../components/card";
 import Image from "../components/image";
+import Loading from "../components/loading";
 import Section from "../components/section";
 import { Slider } from "../components/slider/slider";
 import { Cast, Film as FilmInterface, Trailer } from "../interfaces";
@@ -15,10 +21,11 @@ interface Props {
 }
 
 const Film = (props: Props) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams<any>();
 
-  const [film, setFilm] = useState<FilmInterface | null>(null);
+  const [film, setFilm] = useState<FilmInterface | null | undefined>(null);
 
   const [cast, setCast] = useState<Cast[]>([]);
   const [trailers, setTrailers] = useState<Trailer[]>([]);
@@ -33,22 +40,25 @@ const Film = (props: Props) => {
       setFilm(film);
       setCast(await getCasts(film?.mediaType, film.id));
       setTrailers(await getTrailers(film?.mediaType, film.id));
+      setRecommendations(await getRecommendation(film?.mediaType, film.id));
     }
-
-    const arrs: any[] = [];
-
-    for (let i = 0; i < 20; i++) {
-      arrs.push({});
-    }
-    setRecommendations(arrs);
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
+    setFilm(undefined);
     fetch();
-  }, []);
+  }, [location]);
 
-  if (!film) {
-    return <div>404</div>;
+  if (film === null) {
+    // redirect to 404 page
+    return <></>;
+  } else if (film === undefined) {
+    return (
+      <div className="text-center p-6 h-full flex-1">
+        <Loading></Loading>
+      </div>
+    );
   }
 
   return (
@@ -60,7 +70,7 @@ const Film = (props: Props) => {
       <Section className="-mt-[150px] flex items-center relative z-10 mobile:block">
         <Image
           src={tmdbImageSrc(film.posterPath)}
-          className="w-[100px] min-w-[200px] h-[340px] mobile:mx-auto mobile:mb-10"
+          className="w-[100px] min-w-[200px] h-[340px] mobile:mx-auto mobile:mb-10 mobile:w-[100px]"
         ></Image>
         <div className="px-3 flex flex-col gap-3">
           <p className="text-xl line-clamp-1">{film.title}</p>
@@ -98,7 +108,7 @@ const Film = (props: Props) => {
       {/* trailers */}
       <Section title="Trailers">
         <div className="scrollbar scrollbar-thumb-primary scrollbar-track-header">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-6 rounded-lg">
             {trailers.map((trailer, i) => (
               //mozda ne w-200
               <div className="flex-shrink-0 w-[300px] my-3" key={i}>
@@ -110,16 +120,21 @@ const Film = (props: Props) => {
       </Section>
       {/* seasons */}
       <Section title="Seasons">
-        <Slider slidesToShow={2} slidesToScroll={2}>
+        <Slider
+          slidesToShow={film.seasons.length > 2 ? 2 : 1}
+          slidesToScroll={film.seasons.length > 2 ? 2 : 1}
+          swipe={false}
+        >
           {(_) =>
             film.seasons.map((season, i) => (
               <Card
                 onClick={() =>
                   navigate(`/tv/${film.id}/season/${season.seasonNumber}`)
                 }
-                title={`Season ${season.seasonNumber}`}
-                imageSrc=""
+                title={season.name}
+                imageSrc={tmdbImageSrc(season.posterPath)}
                 key={i}
+                className="h-[192px]"
               ></Card>
             ))
           }
@@ -129,7 +144,12 @@ const Film = (props: Props) => {
         <Slider isMovieCard={true} autoplay={true}>
           {(_) =>
             recommendations.map((film, i) => (
-              <Card title={film.title} imageSrc="" key={i}></Card>
+              <Card
+                onClick={() => navigate(`/${props.mediaType}/${film.id}`)}
+                title={film.title}
+                imageSrc={tmdbImageSrc(film.posterPath)}
+                key={i}
+              ></Card>
             ))
           }
         </Slider>

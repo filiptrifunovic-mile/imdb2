@@ -27,7 +27,7 @@ const Season = () => {
       },
     ],
     title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-  });
+  } as any);
 
   const [episodes, setEpisodes] = useState<any[]>();
 
