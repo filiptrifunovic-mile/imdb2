@@ -1,3 +1,5 @@
+https://imdb2.vercel.app/
+
 React, Typescript, Router-dom, slick-carousel, tailwind css, axios
 
 ![1](https://user-images.githubusercontent.com/114927397/226405493-2e7306d4-c420-47b4-8754-cc4b357e55a5.jpg)
