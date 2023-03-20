@@ -12,6 +12,7 @@ import Image from "../components/image";
 import Loading from "../components/loading";
 import Section from "../components/section";
 import { Slider } from "../components/slider/slider";
+import { TrailerModal } from "../components/trailer-modal";
 import { Cast, Film as FilmInterface, Trailer } from "../interfaces";
 import { MediaType } from "../types";
 import { tmdbImageSrc, youtubeThumbnail } from "../utils";
@@ -30,8 +31,13 @@ const Film = (props: Props) => {
   const [cast, setCast] = useState<Cast[]>([]);
   const [trailers, setTrailers] = useState<Trailer[]>([]);
   const [recommendations, setRecommendations] = useState<FilmInterface[]>([]);
+  const [trailerSrc, setTrailerSrc] = useState("");
 
   const globalContext = useGlobalContext();
+
+  const playTrailer = async (key: string) => {
+    setTrailerSrc(`https://www.youtube.com/embed/${key}?autoplay=1`);
+  };
 
   const fetch = async () => {
     const film = await getDetail(props.mediaType, parseInt(id as string));
@@ -63,6 +69,10 @@ const Film = (props: Props) => {
 
   return (
     <>
+      <TrailerModal
+        onHide={() => setTrailerSrc("")}
+        src={trailerSrc}
+      ></TrailerModal>
       <div className="h-[300px] top-0 left-0 right-0 relative">
         <div className="overlay-film-cover"></div>
         <Image src={tmdbImageSrc(film.coverPath)}></Image>
@@ -90,13 +100,16 @@ const Film = (props: Props) => {
           <p className="line-clamp-3 opacity-[0.9]">{film.description}</p>
         </div>
       </Section>
-      <Section title="Casts">
+      <Section title="Casts" hidden={cast.length === 0}>
         <div className="scrollbar scrollbar-thumb-primary scrollbar-track-header">
           <div className="flex items-center gap-3">
             {cast.map((cast, i) => (
               //mozda ne w-200
               <div className="flex-shrink-0 w-[200px] mb-6" key={i}>
-                <Card imageSrc={tmdbImageSrc(cast.profilePath)}>
+                <Card
+                  withPlay={false}
+                  imageSrc={tmdbImageSrc(cast.profilePath)}
+                >
                   <p className="font-semibold text-xl">{cast.name}</p>
                   <p className="opacity-[0.7] text-sm">{cast.characterName}</p>
                 </Card>
@@ -106,14 +119,17 @@ const Film = (props: Props) => {
         </div>
       </Section>
       {/* trailers */}
-      <Section title="Trailers">
+      <Section title="Trailers" hidden={trailers.length === 0}>
         <div className="scrollbar scrollbar-thumb-primary scrollbar-track-header">
           <div className="flex items-center gap-3 mb-6 rounded-lg">
             {trailers.map((trailer, i) => (
               //mozda ne w-200
-              <div className="flex-shrink-0 w-[300px] my-3" key={i}>
-                <Image src={youtubeThumbnail(trailer.key)}></Image>
-              </div>
+              <Card
+                onClick={() => playTrailer(trailer.key)}
+                imageSrc={youtubeThumbnail(trailer.key)}
+                className="flex-shrink-0"
+                key={i}
+              ></Card>
             ))}
           </div>
         </div>

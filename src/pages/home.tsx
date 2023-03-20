@@ -9,9 +9,11 @@ import {
   getInTheaters,
   getPopulars,
   getTopRated,
+  getTrailers,
   getTrendings,
 } from "../api/tmdb-api";
 import { isFilm, mergeFilms, tmdbImageSrc } from "../utils";
+import { TrailerModal } from "../components/trailer-modal";
 
 const Home = () => {
   const [trending, setTrending] = useState<Film[]>([]);
@@ -19,7 +21,16 @@ const Home = () => {
   const [populars, setPopulars] = useState<Film[]>([]);
   const [topRatedTv, setTopRatedTv] = useState<Film[]>([]);
   const [topRatedMovies, setTopRatedMovies] = useState<Film[]>([]);
+  const [trailerSrc, setTrailerSrc] = useState("");
   const navigate = useNavigate();
+
+  const playTrailer = async (film: Film) => {
+    const trailers = await getTrailers(film.mediaType, film.id);
+
+    setTrailerSrc(
+      `https://www.youtube.com/embed/${trailers[0].key}?autoplay=0`
+    );
+  };
 
   const goToDetailsPage = (film: Film) => {
     navigate(`/${film.mediaType}/${film.id}`);
@@ -61,6 +72,10 @@ const Home = () => {
 
   return (
     <>
+      <TrailerModal
+        onHide={() => setTrailerSrc("")}
+        src={trailerSrc}
+      ></TrailerModal>
       <Section className="py-0" hidden={trending.length === 0}>
         <Slider
           className="slick-hero"
@@ -71,6 +86,7 @@ const Home = () => {
           {(onSwipe) =>
             trending.map((film, i) => (
               <TrendingHero
+                onPlayTrailer={() => playTrailer(film)}
                 onClick={() =>
                   !onSwipe ? navigate(`/${film.mediaType}/${film.id}`) : ""
                 }
