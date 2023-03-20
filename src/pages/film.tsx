@@ -80,7 +80,7 @@ const Film = (props: Props) => {
       <Section className="-mt-[150px] flex items-center relative z-10 mobile:block">
         <Image
           src={tmdbImageSrc(film.posterPath)}
-          className="w-[100px] min-w-[200px] h-[340px] mobile:mx-auto mobile:mb-10 mobile:w-[100px]"
+          className="w-[200px] min-w-[200px] h-[300px] mobile:mx-auto"
         ></Image>
         <div className="px-3 flex flex-col gap-3">
           <p className="text-xl line-clamp-1">{film.title}</p>

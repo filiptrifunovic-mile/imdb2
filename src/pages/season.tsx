@@ -39,7 +39,7 @@ const Season = () => {
       <Section className="-mt-[75px] flex items-center relative z-10 mobile:block">
         <Image
           src={tmdbImageSrc(season.posterPath)}
-          className="w-[250px] min-w-[150px] min-h-[200px] h-[200px] mobile:mx-auto"
+          className="w-[150px] min-w-[250px] min-h-[200px] h-[200px] mobile:mx-auto"
         ></Image>
         <div className="px-3 flex flex-col items-start gap-3 py-3">
           <p className="text-xl line-clamp-1">{season.filmName}</p>
@@ -56,21 +56,19 @@ const Season = () => {
       <Section title="Episodes">
         {season.episodes?.map((episode, i) => (
           <div
-            className="my-6 flex items-stretch gap-4 rounded-md overflow-hidden cursor-pointer hover:bg-primary px-3 py-1.5 mobile:block"
+            className="my-6 flex flex-col items-stretch gap-4 rounded-md overflow-hidden cursor-pointer hover:bg-primary px-3 py-1.5 mobile:block"
             key={i}
           >
             <Image
               src={tmdbImageSrc(episode.stillPath)}
-              className="w-[300px] min-w-[300px] h-[350px]"
+              className="min-w-[300px] w-[300px] h-[150px]"
             ></Image>
             <div className="overflow-hidden flex flex-col gap-3 mobile:py-3">
               <p className="text-lg truncate">
-                Episode {episode.episodeNumber} <br />
-                {episode.title}
+                {episode.episodeNumber}. {episode.title}
               </p>
               <p className="opacity-[0.9] line-clamp-5">{episode.overview}</p>
               <div className="mt-auto pt-3 text-right">
-                Air Date <br />
                 {formatDate(episode.airDate)}
               </div>
             </div>
