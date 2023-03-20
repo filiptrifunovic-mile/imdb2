@@ -61,7 +61,7 @@ const Home = () => {
 
   return (
     <>
-      <Section className="py-0">
+      <Section className="py-0" hidden={trending.length === 0}>
         <Slider
           className="slick-hero"
           autoplay={true}
@@ -81,7 +81,7 @@ const Home = () => {
           }
         </Slider>
       </Section>
-      <Section title="In Theaters">
+      <Section title="In Theaters" hidden={inTheates.length === 0}>
         <Slider isMovieCard={true}>
           {(_) =>
             inTheates.map((film, i) => (
@@ -95,7 +95,7 @@ const Home = () => {
           }
         </Slider>
       </Section>
-      <Section title="What's Popular">
+      <Section title="What's Popular" hidden={populars.length === 0}>
         <Slider isMovieCard={true}>
           {(_) =>
             populars.map((film, i) => (
@@ -109,7 +109,11 @@ const Home = () => {
           }
         </Slider>
       </Section>
-      <Section title="TOP Rated TV">
+      <Section
+        title="TOP Rated TV"
+        hidden={topRatedTv.length === 0}
+        onTitleClick={() => navigate(`/list/top-rated-tv`)}
+      >
         <Slider isMovieCard={true}>
           {(_) =>
             topRatedTv.map((film, i) => (
@@ -123,7 +127,11 @@ const Home = () => {
           }
         </Slider>
       </Section>
-      <Section title="TOP Rated Movies">
+      <Section
+        title="TOP Rated Movies"
+        hidden={topRatedMovies.length === 0}
+        onTitleClick={() => navigate(`/list/top-rated-movies`)}
+      >
         <Slider isMovieCard={true}>
           {(_) =>
             topRatedMovies.map((film, i) => (

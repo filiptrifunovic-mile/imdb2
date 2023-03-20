@@ -120,7 +120,7 @@ const Header = () => {
             placeholder="Search..."
           />
           <IoIosSearch size={18}></IoIosSearch>
-          {isSearchFocused ? (
+          {isSearchFocused && keyword ? (
             <SearchResult
               keyword={keyword}
               goToSearchPage={goToSearchPage}
